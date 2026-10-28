@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vetasis Pro - Yönetim Paneli</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #0f172a;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --radius: 16px;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --secondary: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.025em;
+        }
+
+        .user-info {
+            font-weight: 500;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .user-info::before {
+            content: '';
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: var(--success);
+            border-radius: 50%;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h2 {
+            margin-bottom: 32px;
+            font-size: 1.875rem;
+            font-weight: 700;
+        }
+
+        /* Form & Login */
+        .auth-container {
+            max-width: 480px;
+            background: var(--card-bg);
+            padding: 48px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin: 100px auto auto auto;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .auth-container h2 {
+            margin-bottom: 12px;
+            font-size: 1.875rem;
+        }
+
+        .auth-container p {
+            color: var(--text-light);
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text);
+            font-size: 0.875rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 1rem;
+            background-color: var(--bg);
+            transition: all 0.2s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background-color: var(--card-bg);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-light);
+            border: 1px solid var(--border);
+            margin-top: 16px;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--bg);
+            color: var(--text);
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 32px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border-color: var(--primary);
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .card p {
+            color: var(--text-light);
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        /* Icons mapping (placeholder for aesthetic spacing) */
+        .card::after {
+            content: '→';
+            position: absolute;
+            bottom: 32px;
+            right: 32px;
+            color: var(--text-light);
+            font-size: 1.5rem;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+
+        .card:hover::after {
+            transform: translateX(4px);
+            color: var(--primary);
+        }
+
+        /* Modals / Sub-views */
+        .view-section {
+            display: none;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .back-link {
+            color: var(--primary);
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 24px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-link:hover {
+            color: var(--primary-hover);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 24px;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.875rem;
+        }
+
+        th {
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .badge {
+            padding: 6px 12px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .badge-success { background: #dcfce7; color: #16a34a; }
+        .badge-warning { background: #fef9c3; color: #ca8a04; }
+        
+        .actions-cell {
+            display: flex;
+            gap: 8px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="auth-screen" class="auth-container">
+        <span class="logo">Vetasis Pro</span>
+        <h2>Hesap Oluşturun</h2>
+        <p>Yönetim paneline erişmek için bilgilerinizi girin.</p>
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="fullName">Ad Soyad</label>
+                <input type="text" id="fullName" required placeholder="Adınız Soyadınız">
+            </div>
+            <div class="form-group">
+                <label for="role">Yönetim Türü</label>
+                <select id="role" required>
+                    <option value="" disabled selected>Rolünüzü Seçin</option>
+                    <option value="bina">Bina & Site Yönetimi</option>
+                    <option value="emlak">Emlak Yönetimi</option>
+                    <option value="full">İkisi de (Genel Yönetim)</option>
+                </select>
+            </div>
+            <button type="submit" class="btn">Panele Giriş Yap</button>
+        </form>
+    </div>
+
+    <div id="main-app" style="display: none;">
+        <header>
+            <span class="logo">Vetasis Pro</span>
+            <div id="userInfo" class="user-info"></div>
+        </header>
+
+        <div class="container">
+            <!-- Main Dashboard -->
+            <div id="dashboard-view">
+                <h2 id="panelTitle">Yönetim Paneli</h2>
+                <div id="dashboard" class="dashboard"></div>
+            </div>
+
+            <!-- Detailed Module Views -->
+            <div id="module-view" class="view-section">
+                <div class="back-link" onclick="showDashboard()">← Panele Geri Dön</div>
+                <h2 id="moduleTitle">Modül Adı</h2>
+                <div id="moduleContent"></div>
+            </div>
+            
+            <button id="logoutBtn" class="btn btn-secondary" onclick="logout()" style="max-width: 200px; margin: 40px auto; display: block;">Çıkış Yap</button>
+        </div>
+    </div>
+
+    <script>
+        const cardsData = {
+            bina: [
+                { title: 'Daireler', desc: 'Malik ve Sakinlerin detaylı takibi, daire yönetimi.', action: "openDaireler()" },
+                { title: 'Kasa', desc: 'Gelirler, giderler, borç ekleme ve ödeme takibi.', action: "openKasa()" },
+                { title: 'Duyurular', desc: 'Bina ve site sakinlerine duyuru ekleme yönetimi.', action: "openDuyurular()" },
+                { title: 'SMS Bildirimleri', desc: 'Gruplara özel toplu SMS gönderimi.', action: "openSMS()" }
+            ],
+            emlak: [
+                { title: 'Portföy', desc: 'Satılık ve kiralık dairelerin envanter yönetimi.', action: "openPortfoy()" },
+                { title: 'Müşteri Takibi', desc: 'Alıcı ve satıcı müşteri kayıtları ile tercihleri.', action: "openMusteri()" },
+                { title: 'İşlem Takibi', desc: 'Satış ve kiralama süreçlerinin kayıtları.', action: "openIslem()" },
+                { title: 'Evrak Yönetimi', desc: 'Sözleşmeler ve tapuların dijital arşivlenmesi.', action: "openEvrak()" }
+            ]
+        };
+
+        cardsData.full = [...cardsData.bina, ...cardsData.emlak];
+
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const fullName = document.getElementById('fullName').value;
+            const role = document.getElementById('role').value;
+
+            localStorage.setItem('userName', fullName);
+            localStorage.setItem('userRole', role);
+
+            initApp();
+        });
+
+        function initApp() {
+            const role = localStorage.getItem('userRole');
+            const name = localStorage.getItem('userName');
+
+            if (!role || !cardsData[role]) return;
+
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
+            document.getElementById('userInfo').innerText = name;
+
+            showDashboard();
+        }
+
+        function showDashboard() {
+            document.getElementById('dashboard-view').style.display = 'block';
+            document.getElementById('module-view').style.display = 'none';
+            document.getElementById('logoutBtn').style.display = 'block';
+
+            const role = localStorage.getItem('userRole');
+            const dashboard = document.getElementById('dashboard');
+            dashboard.innerHTML = '';
+
+            if (role === 'bina') document.getElementById('panelTitle').innerText = 'Bina & Site Yönetim Paneli';
+            if (role === 'emlak') document.getElementById('panelTitle').innerText = 'Emlak Yönetim Paneli';
+            if (role === 'full') document.getElementById('panelTitle').innerText = 'Genel Yönetim Paneli';
+
+            cardsData[role].forEach(card => {
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'card';
+                cardDiv.setAttribute('onclick', card.action);
+                cardDiv.innerHTML = `
+                    <h3>${card.title}</h3>
+                    <p>${card.desc}</p>
+                `;
+                dashboard.appendChild(cardDiv);
+            });
+        }
+
+        function loadModuleView(title, contentHtml) {
+            document.getElementById('dashboard-view').style.display = 'none';
+            document.getElementById('logoutBtn').style.display = 'none';
+            const moduleView = document.getElementById('module-view');
+            moduleView.style.display = 'block';
+            document.getElementById('moduleTitle').innerText = title;
+            document.getElementById('moduleContent').innerHTML = contentHtml;
+        }
+
+        function openDaireler() {
+            const content = `
+                <button class="btn" style="max-width: 250px;">+ Yeni Bina Ekle</button>
+                <div style="margin-top:32px;">
+                    <h3>A Blok</h3>
+                    <table>
+                        <tr><th>Daire</th><th>Malik</th><th>Sakin</th><th style="width:100px;">İşlemler</th></tr>
+                        <tr><td>1</td><td>Ahmet Yılmaz</td><td>Ahmet Yılmaz</td><td class="actions-cell"><button class="badge badge-success" style="cursor:pointer; border:none;">Düzenle</button></td></tr>
+                        <tr><td>2</td><td>Ayşe Demir</td><td>Mehmet Kaya</td><td class="actions-cell"><button class="badge badge-success" style="cursor:pointer; border:none;">Düzenle</button></td></tr>
+                    </table>
+                </div>
+                <div style="margin-top:40px;">
+                    <h3>B Blok</h3>
+                    <table>
+                        <tr><th>Daire</th><th>Malik</th><th>Sakin</th><th style="width:100px;">İşlemler</th></tr>
+                        <tr><td>1</td><td>Caner Şahin</td><td>Caner Şahin</td><td class="actions-cell"><button class="badge badge-success" style="cursor:pointer; border:none;">Düzenle</button></td></tr>
+                    </table>
+                </div>
+            `;
+            loadModuleView('Daireler Modülü', content);
+        }
+
+        function openKasa() {
+            const content = `
+                <div>
+                    <button class="btn" style="max-width: 200px;">+ Tahsilat Ekle</button>
+                    <button class="btn btn-secondary" style="max-width: 200px; margin-left:16px;">+ Gider Ekle</button>
+                </div>
+                <div style="margin-top:32px; padding:24px; background-color:var(--card-bg); border-radius:var(--radius); border:1px solid var(--border); box-shadow:0 1px 3px rgba(0,0,0,0.1);">
+                    <h3 style="font-size:0.875rem; color:var(--text-light);">Genel Kasa Bakiyesi</h3>
+                    <div style="font-weight:700; font-size:2rem; color:var(--success); margin-top:8px;">45.000 TL</div>
+                </div>
+                <table>
+                    <tr><th>Tarih</th><th>Açıklama</th><th>Tip</th><th>Tutar</th></tr>
+                    <tr><td>25.10.2026</td><td>A Blok Aidat</td><td>Gelir</td><td style="color:var(--success); font-weight:600;">+25.000 TL</td></tr>
+                    <tr><td>26.10.2026</td><td>Temizlik Şirketi Ödemesi</td><td>Gider</td><td style="color:var(--danger); font-weight:600;">-5.000 TL</td></tr>
+                </table>
+            `;
+            loadModuleView('Kasa Modülü', content);
+        }
+
+        function openDuyurular() {
+            const content = `
+                <button class="btn" style="max-width: 200px;">+ Yeni Duyuru Ekle</button>
+                <table>
+                    <tr><th>Tarih</th><th>Başlık</th><th>Hedef Grup</th></tr>
+                    <tr><td>27.10.2026</td><td>Asansör Bakımı</td><td><span class="badge" style="background:#e0f2fe; color:#0284c7;">A Blok Sakinleri</span></td></tr>
+                    <tr><td>28.10.2026</td><td>Genel Kurul Toplantısı</td><td><span class="badge" style="background:#fef3c7; color:#d97706;">Tüm Malikler</span></td></tr>
+                </table>
+            `;
+            loadModuleView('Duyurular Modülü', content);
+        }
+
+        function openSMS() {
+            const content = `
+                <form onsubmit="event.preventDefault(); alert('SMS Gönderildi!');">
+                    <div class="form-group" style="max-width: 100%;">
+                        <label>Hedef Grup</label>
+                        <select style="max-width: 400px;">
+                            <option>A Blok Malik Grubu</option>
+                            <option>A Blok Sakin Grubu</option>
+                            <option>B Blok Malik Grubu</option>
+                            <option>B Blok Sakin Grubu</option>
+                            <option>Tüm Bina</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>SMS İçeriği</label>
+                        <textarea style="width:100%; max-width:600px; height:120px; padding:16px; border:1px solid var(--border); border-radius:12px; font-family:inherit; font-size:1rem; background-color:var(--bg);"></textarea>
+                    </div>
+                    <button type="submit" class="btn" style="max-width: 200px;">SMS Gönder</button>
+                </form>
+            `;
+            loadModuleView('SMS Bildirimleri Modülü', content);
+        }
+
+        function openPortfoy() {
+            const content = `
+                <button class="btn" style="max-width: 250px;">+ Yeni Portföy Ekle</button>
+                <table>
+                    <tr><th>No</th><th>Tip</th><th>Fiyat</th><th>Durum</th></tr>
+                    <tr><td>101</td><td>Satılık - 3+1 Daire</td><td>3.500.000 TL</td><td><span class="badge badge-success">Müsait</span></td></tr>
+                    <tr><td>102</td><td>Kiralık - 2+1 Daire</td><td>18.000 TL</td><td><span class="badge badge-warning">Kiralandı</span></td></tr>
+                </table>
+            `;
+            loadModuleView('Portföy Modülü', content);
+        }
+
+        function openMusteri() {
+            const content = `
+                <button class="btn" style="max-width: 200px;">+ Müşteri Ekle</button>
+                <table>
+                    <tr><th>Ad Soyad</th><th>Telefon</th><th>Tercih</th></tr>
+                    <tr><td>Murat Aydın</td><td>0532 000 00 00</td><td>Satılık 3+1</td></tr>
+                    <tr><td>Zeynep Çelik</td><td>0533 000 00 00</td><td>Kiralık 2+1</td></tr>
+                </table>
+            `;
+            loadModuleView('Müşteri Takip Modülü', content);
+        }
+
+        function openIslem() {
+            const content = `
+                <button class="btn" style="max-width: 250px;">+ Yeni İşlem Kaydet</button>
+                <table>
+                    <tr><th>Müşteri</th><th>Portföy No</th><th>İşlem Türü</th><th>Tutar</th></tr>
+                    <tr><td>Murat Aydın</td><td>101</td><td>Satış</td><td>3.500.000 TL</td></tr>
+                </table>
+            `;
+            loadModuleView('İşlem Takip Modülü', content);
+        }
+
+        function openEvrak() {
+            const content = `
+                <button class="btn" style="max-width: 200px;">+ Belge Yükle</button>
+                <table>
+                    <tr><th>Belge Adı</th><th>İlgili Daire/Portföy</th><th>İndir</th></tr>
+                    <tr><td>Tapu Fotokopisi</td><td>Daire 101</td><td><button class="badge badge-success" style="cursor:pointer; border:none;">İndir</button></td></tr>
+                    <tr><td>Kira Sözleşmesi</td><td>Daire 102</td><td><button class="badge badge-success" style="cursor:pointer; border:none;">İndir</button></td></tr>
+                </table>
+            `;
+            loadModuleView('Evrak Yönetimi Modülü', content);
+        }
+
+        function logout() {
+            localStorage.clear();
+            location.reload();
+        }
+
+        window.onload = function() {
+            if (localStorage.getItem('userRole')) {
+                initApp();
+            }
+        };
+    </script>
+</body>
+</html>
